@@ -715,6 +715,24 @@
             workflow: "Therapists evaluate patients, coordinate clinical goals within the IDT, and submit daily notes into the EHR.",
             conversation: "\"We need our SLP and OT to coordinate a joint cognitive assessment for our stroke patients so we can optimize our therapy scheduling next week.\"",
             pitch: "\"Our scheduling platform coordinates the calendars of your PT, OT, and SLP teams, ensuring optimal therapist utilization while protecting high-quality, patient-centric rehab care.\""
+        },
+        "IPA": {
+            badge: "Reimbursement",
+            class: "badge-reimbursement",
+            meaning: "Interim Payment Assessment. A CMS-mandated MDS assessment triggered by a significant change in a resident's clinical condition during a Medicare Part A stay, used to recalculate PDPM reimbursement rates mid-stay.",
+            impact: "When a resident's clinical status significantly improves or declines, the IPA resets the active PDPM payment rates. Missing or delaying an IPA can result in serious over- or under-billing, creating audit exposure and direct revenue loss.",
+            workflow: "The MDS coordinator triggers an IPA when the IDT formally identifies a significant change in condition. The assessment must be completed and submitted through the EHR within strict CMS timelines.",
+            conversation: "\"Our resident in room 118 had a major clinical decline last week — they went from walking independently to non-ambulatory. We need to trigger an IPA immediately or we will be billing the wrong PDPM rate for the rest of their stay.\"",
+            pitch: "\"Our platform automatically flags significant clinical changes documented by your nursing staff in the EMR, alerting your MDS coordinator to open an IPA before the billing window closes so you never leave reimbursement on the table.\""
+        },
+        "MAR": {
+            badge: "Clinical",
+            class: "badge-clinical",
+            meaning: "Medication Administration Record. The legal document — paper or electronic — tracking every medication administered to a resident, including drug name, dose, route, time, and the signature of the nurse who administered it.",
+            impact: "Incomplete or inaccurate MARs create direct medication error liability, trigger state survey citations, and obscure the high-cost drug data the MDS coordinator needs to accurately capture NTA billing points under PDPM.",
+            workflow: "LPNs, LVNs, and RNs document every medication pass in real time within the EHR-based MAR. The MDS coordinator audits MARs against the ARD lookback window to identify and code high-cost medications as NTA comorbidities.",
+            conversation: "\"Our state surveyor cited us last month for incomplete MAR documentation. Three nurses were signing off medication passes hours after administration, and we could not prove timely delivery to the inspector.\"",
+            pitch: "\"Our point-of-care medication module prompts nurses to document each pass in real time, creating a time-stamped, audit-ready MAR that protects your facility during state surveys and ensures every high-cost drug is captured for your NTA billing.\""
         }
     };
 

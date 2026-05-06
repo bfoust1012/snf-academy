@@ -393,6 +393,42 @@
         .hidden {
             display: none !important;
         }
+
+        .tooltip-term {
+            border-bottom: 1px dashed var(--accent);
+            cursor: help;
+            position: relative;
+            display: inline;
+        }
+
+        .tooltip-term::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 7px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary);
+            color: white;
+            padding: 8px 13px;
+            border-radius: 7px;
+            font-size: 0.78rem;
+            font-style: normal;
+            font-weight: 400;
+            white-space: normal;
+            min-width: 210px;
+            max-width: 270px;
+            text-align: left;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.18s ease;
+            line-height: 1.5;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+        }
+
+        .tooltip-term:hover::after {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -736,6 +772,59 @@
         }
     };
 
+    // Acronym tooltip quick-reference map
+    const acronymTooltips = {
+        "IPA":    "Interim Payment Assessment — MDS triggered by a significant clinical change mid-stay to recalculate PDPM rates.",
+        "MAR":    "Medication Administration Record — Legal document logging every medication given, including dose, route, time, and nurse signature.",
+        "ADLs":   "Activities of Daily Living — Daily care tasks (mobility, hygiene, eating) logged by CNAs and used in PDPM nursing acuity scoring.",
+        "ADL":    "Activity of Daily Living — One scored daily care task logged by CNAs and used in PDPM nursing acuity scoring.",
+        "PDPM":   "Patient-Driven Payment Model — Medicare Part A reimbursement based on patient clinical complexity, not therapy hours.",
+        "CMI":    "Case Mix Index — Numerical score of average patient complexity; higher CMI = higher daily reimbursement.",
+        "EHR":    "Electronic Health Record — Central software platform (e.g. PointClickCare) used as the facility's digital medical chart.",
+        "EMR":    "Electronic Medical Record — Central software platform used as the facility's digital medical chart.",
+        "HIPAA":  "Health Insurance Portability and Accountability Act — Federal law mandating strict protection of patient PHI.",
+        "MDS":    "Minimum Data Set — Federally-mandated clinical assessment that directly drives PDPM billing rates.",
+        "ARD":    "Assessment Reference Date — The date that defines the lookback window for all MDS data collection.",
+        "CNA":    "Certified Nursing Assistant — Frontline staff who deliver hands-on daily care and log ADL scores.",
+        "LPN":    "Licensed Practical Nurse — Administers medications and clinical treatments; documents in the MAR.",
+        "LVN":    "Licensed Vocational Nurse — Administers medications and clinical treatments; documents in the MAR.",
+        "RN":     "Registered Nurse — Leads clinical evaluations, oversees the care team, and verifies MDS assessments.",
+        "CMS":    "Centers for Medicare & Medicaid Services — Federal body that governs SNF billing rules and the Five-Star Quality Rating.",
+        "SNF":    "Skilled Nursing Facility — Post-acute care setting providing 24-hour skilled nursing and rehabilitation.",
+        "IDT":    "Interdisciplinary Team — The collaborative group (nurses, therapists, physicians, dieticians) coordinating patient care.",
+        "ICD-10": "International Classification of Diseases, 10th Revision — Diagnostic codes that set a patient's PDPM clinical category.",
+        "NTA":    "Non-Therapy Ancillaries — PDPM payment bracket covering high-cost drugs, IV treatments, and complex medical equipment.",
+        "PT":     "Physical Therapy — Rehabilitation focused on improving patient mobility and physical function.",
+        "OT":     "Occupational Therapy — Rehabilitation focused on restoring a patient's ability to perform daily tasks independently.",
+        "SLP":    "Speech-Language Pathology — Therapy addressing communication, cognitive function, and swallowing disorders.",
+        "PHI":    "Protected Health Information — Any patient data that must be secured under HIPAA law."
+    };
+
+    // Wrap recognized acronyms in rendered detail fields with hover tooltips
+    function wrapAcronyms(currentTerm) {
+        const fieldIds = ['detailMeaning', 'detailImpact', 'detailWorkflow', 'detailConversation', 'detailPitch'];
+        // Sort longest acronym first to prevent partial matches (e.g. ADLs before ADL)
+        const sorted = Object.entries(acronymTooltips).sort((a, b) => b[0].length - a[0].length);
+
+        fieldIds.forEach(fieldId => {
+            let el = document.getElementById(fieldId);
+            if (!el) return;
+            let html = el.innerHTML;
+
+            sorted.forEach(([acronym, tooltip]) => {
+                // Skip the term currently being viewed (handles compound keys like "CNA, LVN/LPN, RN")
+                if (currentTerm.toUpperCase().includes(acronym.toUpperCase())) return;
+                const escaped = acronym.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const safeTooltip = tooltip.replace(/"/g, '&quot;');
+                // Match whole word; negative lookahead avoids replacing inside HTML tag attributes
+                const regex = new RegExp('\\b' + escaped + '\\b(?![^<]*>)', 'g');
+                html = html.replace(regex, `<span class="tooltip-term" data-tooltip="${safeTooltip}">${acronym}</span>`);
+            });
+
+            el.innerHTML = html;
+        });
+    }
+
     // System Navigation State Manager
     function switchView(viewName) {
         // Hide all views
@@ -805,6 +894,8 @@
         document.getElementById('detailWorkflow').innerHTML = data.workflow;
         document.getElementById('detailConversation').innerHTML = data.conversation;
         document.getElementById('detailPitch').innerHTML = data.pitch;
+
+        wrapAcronyms(term);
     }
 
     // Search Bar: Filters Button List

@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNF Sales Mastery Academy - Dynamic Edition</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --primary-light: #1e293b;
+            --accent: #0d9488;
+            --accent-hover: #0f766e;
+            --warning: #ea580c;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --light-bg: #f8fafc;
+            --card-border: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e1b4b 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+        }
+
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            background-color: #e2e8f0;
+            color: var(--text-dark);
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* Layout Grid */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1.8fr 1.2fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        /* Interactive Grid of Abbreviations */
+        .abbrev-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .abbrev-btn {
+            background-color: white;
+            border: 2px solid var(--card-border);
+            color: var(--primary-light);
+            padding: 15px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .abbrev-btn:hover {
+            border-color: var(--accent);
+            background-color: #f0fdf4;
+            transform: translateY(-2px);
+        }
+
+        .abbrev-btn.active-term {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            box-shadow: 0 4px 6px rgba(13, 148, 136, 0.2);
+        }
+
+        /* Search input */
+        .search-container {
+            margin-bottom: 25px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1rem;
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent);
+        }
+
+        /* Detail Elements */
+        .term-detail-container {
+            min-height: 200px;
+        }
+
+        .term-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--light-bg);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .term-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            background-color: #cbd5e1;
+            color: var(--text-dark);
+            display: inline-block;
+        }
+
+        .badge-reimbursement { background-color: #fee2e2; color: #991b1b; }
+        .badge-clinical { background-color: #e0f2fe; color: #0369a1; }
+        .badge-regulatory { background-color: #fef3c7; color: #92400e; }
+        .badge-roles { background-color: #f3e8ff; color: #6b21a8; }
+
+        .section-block {
+            margin-bottom: 20px;
+        }
+
+        .section-block h4 {
+            margin: 0 0 8px 0;
+            font-size: 1rem;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .workflow-connection {
+            background-color: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .clinical-impact {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary-light);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .conversation-box {
+            background-color: #fffbeb;
+            border-left: 4px solid var(--warning);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+
+        .sales-pitch {
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--success);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            font-weight: 500;
+        }
+
+        /* Interactive Quiz Styles */
+        .quiz-container {
+            position: sticky;
+            top: 20px;
+        }
+
+        .quiz-option {
+            display: block;
+            width: 100%;
+            background: var(--light-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        .quiz-explanation {
+            background-color: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* Personas Grid */
+        .personas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .persona-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            padding: 25px;
+        }
+
+        .persona-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--light-bg);
+            padding-bottom: 10px;
+        }
+
+        .persona-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        /* Flashcard Panel */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            height: 380px;
+            margin: 20px auto;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+            border: 2px dashed var(--accent);
+            background: white;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            border-style: solid;
+            overflow-y: auto;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        /* General Utilities */
+        .btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e2e8f0;
+            height: 12px;
+            border-radius: 9999px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background-color: var(--accent);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SNF Sales Mastery Academy</h1>
+    <p>Connecting Clinical Workflows, Reimbursement Models, and Sales Strategy</p>
+</header>
+
+<div class="container">
+    <div class="card" style="padding: 20px 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div>
+                <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-muted);">Academy Completion Progress</h3>
+                <span id="completionLabel" style="font-size: 1.5rem; font-weight: 800; color: var(--accent);">0/15 Completed</span>
+            </div>
+            <div style="width: 60%; min-width: 250px;">
+                <div class="progress-bar">
+                    <div id="academyProgress" class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-tabs">
+        <button id="tab-knowledge" class="tab-btn active" onclick="switchView('knowledge')">Knowledge Base</button>
+        <button id="tab-personas" class="tab-btn" onclick="switchView('personas')">Decision Makers</button>
+        <button id="tab-flashcards" class="tab-btn" onclick="switchView('flashcards')">Spaced Repetition Flashcards</button>
+    </div>
+
+    <div id="knowledgeView" class="main-layout">
+        <div>
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-bar" placeholder="Type clinical terms or abbreviations to filter button list below..." onkeyup="filterAbbrevButtons()">
+            </div>
+
+            <div id="abbrevGrid" class="abbrev-grid">
+                </div>
+
+            <div class="card term-detail-container">
+                <div id="defaultDetailMsg" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                    <h3 style="margin: 0 0 10px 0;">Select an abbreviation above to begin</h3>
+                    <p style="margin: 0;">Each card breaks down definitions, operational workflows, dialog examples, and sales pitches.</p>
+                </div>
+                <div id="termDetailContent" class="hidden">
+                    <div class="term-header">
+                        <h2 id="detailTitle">PDPM</h2>
+                        <span id="detailBadge" class="badge">Reimbursement</span>
+                    </div>
+                    
+                    <div class="section-block">
+                        <h4>1. What it Means</h4>
+                        <p id="detailMeaning"></p>
+                    </div>
+
+                    <div class="section-block">
+                        <h4>2. Operational & Financial Impact</h4>
+                        <div id="detailImpact" class="clinical-impact"></div>
+                    </div>
+
+                    <div class="section-block">
+                        <h4>3. Workflow Connections</h4>
+                        <div id="detailWorkflow" class="workflow-connection"></div>
+                    </div>
+
+                    <div class="section-block">
+                        <h4>4. Real-World Conversation</h4>
+                        <div id="detailConversation" class="conversation-box"></div>
+                    </div>
+
+                    <div class="section-block">
+                        <h4>5. Strategic Sales Pitch</h4>
+                        <div id="detailPitch" class="sales-pitch"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="quiz-container">
+                <div class="card" style="border-top: 5px solid var(--accent);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin: 0;">Interactive Knowledge Quiz</h3>
+                        <span id="quizBadge" class="badge">Setup</span>
+                    </div>
+                    <div id="quizContent">
+                        <p id="questionText" style="font-weight: 600; font-size: 1.1rem; margin-bottom: 20px;">Click below to start your sales certification training!</p>
+                        <div id="quizOptions">
+                            <button class="btn" style="width: 100%;" onclick="startQuiz()">Start Quiz</button>
+                        </div>
+                        <div id="quizExplanation" class="quiz-explanation"></div>
+                        <button id="nextBtn" class="btn hidden" style="margin-top: 15px; width: 100%;" onclick="nextQuestion()">Next Question</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="personasView" class="hidden">
+        <h2 style="margin-bottom: 25px;">Understand Your Buyers</h2>
+        <div class="personas-grid">
+            <div class="persona-card">
+                <div class="persona-header">
+                    <div class="persona-avatar">AH</div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.15rem;">The Licensed Administrator (LNHA)</h3>
+                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted)">The Executive Decision Maker</p>
+                    </div>
+                </div>
+                <p><strong>Primary Driver:</strong> Facility-wide profitability, protecting the referral pipeline, managing state survey risks, and maintaining high occupancy rates.</p>
+                <p><strong>Daily Stresses:</strong> Nursing labor shortages, escalating agency staff spending, and maintaining their public Five-Star Quality Star Rating.</p>
+                <div class="sales-pitch">
+                    <strong>How to Pitch:</strong> Frame your product around ROI. Show them how your tool reduces nurse turnover, keeps agency staff hours low, or protects Medicare revenue.
+                </div>
+            </div>
+
+            <div class="persona-card">
+                <div class="persona-header">
+                    <div class="persona-avatar">DN</div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.15rem;">The Director of Nursing (DON)</h3>
+                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted)">The Clinical Shield</p>
+                    </div>
+                </div>
+                <p><strong>Primary Driver:</strong> High-quality clinical outcomes, patient safety, nurse retention, and preparing for strict state surveys.</p>
+                <p><strong>Daily Stresses:</strong> Staff burnout, floor nurses taking too long to chart in the EMR, medication errors, and hospital readmissions.</p>
+                <div class="sales-pitch">
+                    <strong>How to Pitch:</strong> Never pitch a tool that adds work. Instead, pitch how your product **reduces screens and clicks**, saving hours of charting time for their busy nurses.
+                </div>
+            </div>
+
+            <div class="persona-card">
+                <div class="persona-header">
+                    <div class="persona-avatar">MC</div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.15rem;">The MDS Coordinator</h3>
+                        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted)">The Financial Auditor</p>
+                    </div>
+                </div>
+                <p><strong>Primary Driver:</strong> Complete documentation accuracy, meeting strict assessment dates (ARDs), and avoiding billing audits.</p>
+                <p><strong>Daily Stresses:</strong> Chasing down floor nurses for incomplete ADL records, diagnosing coding errors, and backlogged paperwork.</p>
+                <div class="sales-pitch">
+                    <strong>How to Pitch:</strong> Pitch your tool as a safety net. Explain how it automatically pulls documentation into the EMR, saving them hours of tedious auditing before clinical submissions.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="flashcardsView" class="hidden" style="max-width: 600px; margin: 0 auto;">
+        <h2 style="text-align: center; margin-bottom: 25px;">Spaced Repetition Flashcards</h2>
+        <div class="flashcard-wrapper">
+            <div id="flashcardElement" class="flashcard" onclick="flipCard()">
+                <div class="card-face">
+                    <span id="flashcardBadge" class="badge badge-reimbursement" style="margin-bottom: 15px;"></span>
+                    <h2 id="flashcardFront" style="margin: 0; font-size: 2.2rem; text-align: center;">Term</h2>
+                    <p style="margin-top: 20px; font-size: 0.85rem; color: var(--text-muted);">Click Card to Reveal Definition & Sales Strategy</p>
+                </div>
+                <div class="card-face card-back">
+                    <h3 id="flashcardBackTitle" style="margin: 0 0 10px 0; color: var(--accent);">Definition</h3>
+                    <p id="flashcardBackDef" style="margin: 0 0 20px 0; font-size: 0.95rem;">Definition goes here...</p>
+                    
+                    <h4 style="margin: 0 0 5px 0; font-size: 0.9rem; color: var(--primary);">Financial & Operational Impact:</h4>
+                    <p id="flashcardBackImpact" style="margin: 0 0 15px 0; font-size: 0.85rem; color: var(--text-muted);"></p>
+                    
+                    <h4 style="margin: 0 0 5px 0; font-size: 0.9rem; color: var(--success);">Sales Angle:</h4>
+                    <p id="flashcardBackSales" style="margin: 0; font-size: 0.85rem; font-style: italic;"></p>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+            <button class="btn" onclick="prevCard()">Previous</button>
+            <button class="btn" onclick="nextCard()">Next Card</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Master Database of all 16 Terms mapped structurally
+    const termDatabase = {
+        "PDPM": {
+            badge: "Reimbursement",
+            class: "badge-reimbursement",
+            meaning: "Patient-Driven Payment Model. The Prospective Payment System used by CMS for Medicare Part A inpatient skilled stays.",
+            impact: "replaces therapy-hours with patient complexity metrics as payment drivers. Incomplete documentation leads directly to lower case-mix classifications and immediate daily revenue loss.",
+            workflow: "Connects ICD-10 coding, clinical assessments completed by the IDT, and ADL trackers inside the EMR directly into billing rates.",
+            conversation: "\"Since we transitioned to PDPM, our therapy therapy volumes are optimized, but we are losing revenue because our primary clinical diagnosis mapping in the EMR doesn't match our actual physician documentation.\"",
+            pitch: "\"Our software protects your PDPM margins by systematically finding and flagging high-acuity patient indicators buried in your nurses' unstructured notes so you never undercode a patient's case mix index.\""
+        },
+        "CMI": {
+            badge: "Finance",
+            class: "badge-reimbursement",
+            meaning: "Case Mix Index. A numerical value that represents the clinical complexity and resource usage level of the patients within the facility.",
+            impact: "A higher average CMI means the facility is caring for highly complex clinical patients, justifying higher daily reimbursement. If CMI is low but nursing labor hours are high, the facility is losing major money due to documentation leakage.",
+            workflow: "Calculated dynamically based on diagnosis profiles logged in the MDS assessment during designated ARD snapshot dates.",
+            conversation: "\"Our regional office is questioning why our Medicare CMI dropped from 1.34 down to 1.12 over the last quarter while our agency nurse spending went through the roof. We need to audit our MDS submissions.\"",
+            pitch: "\"We provide live auditing dashboards that match your real-time clinician clinical efforts with your billing CMI, ensuring you are actually reimbursed for the complex, expensive care your staff is rendering.\""
+        },
+        "EHR/EMR": {
+            badge: "Clinical",
+            class: "badge-clinical",
+            meaning: "Electronic Health Record / Electronic Medical Record. The central software platform (like PointClickCare or MatrixCare) used as the electronic medical chart of the facility.",
+            impact: "Serves as the foundation for clinical workflow tracking. If the platform is slow or hard to navigate, floor staff miss logging clinical events, leading directly to billing and regulatory audit vulnerabilities.",
+            workflow: "Aggregates daily CNA tracking (ADLs), nursing clinical inputs, and physician directives to generate clinical data utilized by the MDS coordinator.",
+            conversation: "\"We just bought a new clinical observation tool, but it doesn't integrate directly with our main PointClickCare EHR, so my nurses have to double-document everything.\"",
+            pitch: "\"Our platform has a seamless, bi-directional API integration with all major post-acute EHR platforms. Your staff will never have to double-type clinical records again.\""
+        },
+        "HIPAA": {
+            badge: "Regulatory",
+            class: "badge-regulatory",
+            meaning: "Health Insurance Portability and Accountability Act. Federal law mandating strict privacy standards, cybersecurity protocols, and safety regulations to protect patient PHI (Protected Health Information).",
+            impact: "Violations trigger catastrophic Civil Monetary Penalties (fines), state regulatory citations, public disclosure mandates, and extensive reputation damage.",
+            workflow: "Applies to all electronic data transfers, system interactions within the EMR, messaging protocols used by the IDT, and software vendor integrations.",
+            conversation: "\"A nurse texted patient wound photos to a physician on a personal mobile device last week. That is a major HIPAA breach. We must lock down our communication lines immediately.\"",
+            pitch: "\"Our software offers a fully secure, end-to-end encrypted messaging portal built specifically to keep your clinical IDT communications strictly HIPAA-compliant.\""
+        },
+        "MDS": {
+            badge: "Compliance",
+            class: "badge-regulatory",
+            meaning: "Minimum Data Set. A massive, federally-mandated clinical assessment compiled for all residents in certified nursing homes.",
+            impact: "Forms the absolute baseline for patient care planning and determines the PDPM reimbursement levels. Poorly handled MDS assessments trigger immediate state compliance citations.",
+            workflow: "Assembled by the MDS Coordinator using nursing documentation, therapy logs, and physician orders captured within strict ARD timelines.",
+            conversation: "\"Our MDS coordinator is completely overwhelmed by the volume of back-logged assessments. We need to pull nursing staff off the clinical floor just to help audit the electronic records.\"",
+            pitch: "\"Our software acts as an automated assistant for your MDS Coordinator, pulling clinical events and therapy metrics directly from your EMR and pre-populating assessment schedules to prevent missed deadlines.\""
+        },
+        "ARD": {
+            badge: "Compliance",
+            class: "badge-regulatory",
+            meaning: "Assessment Reference Date. The designated date of an MDS assessment that defines the lookback period (usually 7 to 14 days) for all data collected.",
+            impact: "Crucial timing mechanism. If clinical services or medical changes (such as IV medication) happen outside the ARD window, they cannot legally be counted on the MDS billing form.",
+            workflow: "EHR documentation records from nursing, medical staff, and therapy are audited based strictly around the set ARD to compile the final MDS file.",
+            conversation: "\"We missed setting the optimal ARD for the resident in 204B, and we can't capture their IV therapy window anymore. We just lost thousands of dollars on that admission's reimbursement.\"",
+            pitch: "\"Our platform uses real-time EMR analytics to dynamically alert your MDS coordinators of the perfect financial and clinical ARD windows, so you never lock an assessment date that leaves money on the table.\""
+        },
+        "ADLs": {
+            badge: "Clinical",
+            class: "badge-clinical",
+            meaning: "Activities of Daily Living. Core tasks of daily care including mobility, transfers, toileting, hygiene, and eating.",
+            impact: "Measures physical independence. Incomplete baseline tracking makes the patient appear more independent than they are, dragging down the PDPM nursing component rate.",
+            workflow: "CNAs log these levels during every shift at point-of-care, which the MDS coordinator pulls to establish the official nursing acuity index.",
+            conversation: "\"Our CNAs are so busy delivering physical care that they aren't logging ADL scores until the end of their 12-hour shifts. The data is incomplete, and our nursing CMI is tanking.\"",
+            pitch: "\"Our point-of-care charting app is optimized specifically for busy CNAs, allowing them to accurately record ADLs with only three taps on a mobile screen right at the bedside.\""
+        },
+        "CNA, LVN/LPN, RN": {
+            badge: "Roles",
+            class: "badge-roles",
+            meaning: "Certified Nursing Assistant (CNA), Licensed Vocational/Practical Nurse (LVN/LPN), and Registered Nurse (RN).",
+            impact: "The clinical backbone and largest expense category in any SNF. Labor shortages force facilities to use expensive third-party staffing agencies, destroying profit margins.",
+            workflow: "CNAs handle daily ADLs. LPNs/LVNs handle medications and treatments. RNs lead the clinical evaluations and verify MDS assessments.",
+            conversation: "\"We are relying heavily on nursing agency hours on our night shift. Our standard operational budget is blown, and the lack of clinical consistency is hurting our care outcomes.\"",
+            pitch: "\"Our scheduling platform dramatically improves shift-fill rates, reduces the need for expensive agency staff, and matches your nursing schedules to your actual patient volume in real-time.\""
+        },
+        "CMS": {
+            badge: "Regulatory",
+            class: "badge-regulatory",
+            meaning: "Centers for Medicare & Medicaid Services. The federal regulatory body administering public health funding and safety guidelines for post-acute facilities.",
+            impact: "Dictates billing rules, compliance parameters, and manages the public Five-Star Quality Rating system.",
+            workflow: "Inspects facilities during annual state surveys and reviews EMR documentation and MDS filings to approve billing claims.",
+            conversation: "\"We have our annual state survey inspection next week. The CMS surveyors will audit our resident fall prevention programs and EHR documentation meticulously.\"",
+            pitch: "\"Our quality control modules are designed around CMS inspection guidelines, allowing you to catch clinical issues and documentation gaps before federal inspectors step into your lobby.\""
+        },
+        "Medicare Part A / Part B": {
+            badge: "Reimbursement",
+            class: "badge-reimbursement",
+            meaning: "Federal health insurance. Part A covers up to 100 days of skilled nursing stays. Part B covers outpatient therapies, physician services, and equipment.",
+            impact: "Part A is highly lucrative but capped at 100 days. Transitioning clinical care correctly to Part B is vital to preserve ongoing therapy coverage without billing denials.",
+            workflow: "Part A claims use PDPM rates. Once Part A days are exhausted, the care team coordinates with therapists to submit claims under Part B guidelines.",
+            conversation: "\"Resident Smith's Medicare Part A benefits end tomorrow. We need to transition her therapy services over to Medicare Part B and verify we have the required physician certifications signed.\"",
+            pitch: "\"Our billing system prevents costly billing denials by automatically verifying and flagging missing doctor signatures before transitioning patient therapy services from Part A to Part B.\""
+        },
+        "Medicaid": {
+            badge: "Reimbursement",
+            class: "badge-reimbursement",
+            meaning: "Joint federal and state health funding program covering long-term custodial care for low-income residents.",
+            impact: "Medicaid rates are significantly lower than Medicare and often fail to cover standard nursing costs. Efficient operations are required to break even on high-Medicaid wings.",
+            workflow: "State funding formulas utilize the overall resident MDS case-mix indices to establish localized facility reimbursement levels.",
+            conversation: "\"With 75% of our current building occupancy on Medicaid, our margins are incredibly tight. We have to watch our supply overhead and staff clinical hours closely.\"",
+            pitch: "\"Our operational platform optimizes supply and workforce scheduling, helping you control variable costs and maintain healthy margins even with a high-percentage Medicaid patient mix.\""
+        },
+        "SNF": {
+            badge: "Clinical",
+            class: "badge-clinical",
+            meaning: "Skilled Nursing Facility. A post-acute care setting providing 24-hour skilled nursing and clinical rehabilitation services.",
+            impact: "Operates under extreme pressure to limit hospital readmissions, maintain high occupancy rates, and navigate tight staffing laws.",
+            workflow: "The hub that integrates CMS guidelines, insurance payers, EMR databases, and rehabilitation therapy services.",
+            conversation: "\"Our local SNF is struggling with hospital readmissions. If they don't lower their readmission rate, local health systems will stop sending them patients.\"",
+            pitch: "\"We help SNFs protect their hospital referral streams by giving clinical teams early-warning clinical alerts that reduce preventable hospital readmissions.\""
+        },
+        "IDT": {
+            badge: "Clinical",
+            class: "badge-clinical",
+            meaning: "Interdisciplinary Team. The collaborative clinical team (physicians, nurses, therapists, dieticians, social services) coordinating patient care.",
+            impact: "Poor communication between clinical segments causes medical errors, slow recovery times, and clinical readmissions.",
+            workflow: "Executes care plan conferences, audits EHR data, and provides direct updates to the MDS coordinator.",
+            conversation: "\"Our weekly IDT care plan meeting is taking three hours because our nursing and therapy teams are looking at completely different dashboards inside our software.\"",
+            pitch: "\"Our platform provides a unified clinical dashboard that aggregates metrics for the entire IDT, reducing meeting coordination times and eliminating communication gaps.\""
+        },
+        "ICD-10": {
+            badge: "Reimbursement",
+            class: "badge-reimbursement",
+            meaning: "Standardized system of alpha-numeric diagnostic codes representing specific clinical conditions.",
+            impact: "Under PDPM, these codes establish the clinical categorization of the patient, setting the core foundation of reimbursement.",
+            workflow: "Sourced from physician charts, loaded into the EHR, and transcribed onto the MDS to feed PDPM equations.",
+            conversation: "\"We just had three billing claims returned to us because the clinical team coded a generic symptom instead of a specific, underlying ICD-10 diagnosis. We need to retrain our team.\"",
+            pitch: "\"Our automated audit tool scans your physician orders and flags non-specific or incorrect ICD-10 codes *before* your team submits their MDS, eliminating payment delays.\""
+        },
+        "NTA": {
+            badge: "Reimbursement",
+            class: "badge-reimbursement",
+            meaning: "Non-Therapy Ancillaries. A PDPM payment bracket representing high-cost drugs, IV treatments, or complex medical equipment.",
+            impact: "High financial risk. If a facility administers expensive IV medications without coding the underlying NTA clinical condition on the MDS, they lose thousands in unpaid bills.",
+            workflow: "NTA comorbidities are documented in clinical notes and matched with ICD-10 codes within the ARD window.",
+            conversation: "\"The resident in room 302 is receiving active chemotherapy, but our MDS coordinator missed coding it on the assessment. Our NTA payment index is completely wrong.\"",
+            pitch: "\"Our pharmacy integration module automatically cross-references high-cost active prescriptions with your MDS submissions to ensure you capture every single NTA point you are eligible for.\""
+        },
+        "Therapy Categories (PT, OT, SLP)": {
+            badge: "Clinical",
+            class: "badge-clinical",
+            meaning: "Physical Therapy (PT), Occupational Therapy (OT), and Speech-Language Pathology (SLP).",
+            impact: "Rehabilitation is critical to improving patient mobility, restoring independence, and lowering costly hospital readmissions.",
+            workflow: "Therapists evaluate patients, coordinate clinical goals within the IDT, and submit daily notes into the EHR.",
+            conversation: "\"We need our SLP and OT to coordinate a joint cognitive assessment for our stroke patients so we can optimize our therapy scheduling next week.\"",
+            pitch: "\"Our scheduling platform coordinates the calendars of your PT, OT, and SLP teams, ensuring optimal therapist utilization while protecting high-quality, patient-centric rehab care.\""
+        }
+    };
+
+    // System Navigation State Manager
+    function switchView(viewName) {
+        // Hide all views
+        document.getElementById('knowledgeView').classList.add('hidden');
+        document.getElementById('personasView').classList.add('hidden');
+        document.getElementById('flashcardsView').classList.add('hidden');
+        
+        // Remove active class from all tabs
+        document.getElementById('tab-knowledge').classList.remove('active');
+        document.getElementById('tab-personas').classList.remove('active');
+        document.getElementById('tab-flashcards').classList.remove('active');
+
+        // Show selected view and activate tab button
+        if (viewName === 'knowledge') {
+            document.getElementById('knowledgeView').classList.remove('hidden');
+            document.getElementById('tab-knowledge').classList.add('active');
+        } else if (viewName === 'personas') {
+            document.getElementById('personasView').classList.remove('hidden');
+            document.getElementById('tab-personas').classList.add('active');
+        } else if (viewName === 'flashcards') {
+            document.getElementById('flashcardsView').classList.remove('hidden');
+            document.getElementById('tab-flashcards').classList.add('active');
+            setupFlashcards();
+        }
+    }
+
+    // Generate Abbreviation Buttons in Grid
+    function renderAbbreviationGrid() {
+        const grid = document.getElementById('abbrevGrid');
+        grid.innerHTML = ""; // Clear
+        
+        Object.keys(termDatabase).forEach(term => {
+            let btn = document.createElement('button');
+            btn.className = "abbrev-btn";
+            btn.id = "btn-" + term.replace(/\s+/g, '-');
+            btn.innerText = term;
+            btn.onclick = () => selectTerm(term);
+            grid.appendChild(btn);
+        });
+    }
+
+    // Select a Term to Show Details
+    function selectTerm(term) {
+        // Highlight active button
+        const buttons = document.getElementsByClassName('abbrev-btn');
+        for (let btn of buttons) {
+            btn.classList.remove('active-term');
+        }
+        
+        const activeBtn = document.getElementById("btn-" + term.replace(/\s+/g, '-'));
+        if (activeBtn) {
+            activeBtn.classList.add('active-term');
+        }
+
+        // Hide default message, show details
+        document.getElementById('defaultDetailMsg').classList.add('hidden');
+        document.getElementById('termDetailContent').classList.remove('hidden');
+
+        // Populate detail fields
+        const data = termDatabase[term];
+        document.getElementById('detailTitle').innerText = term;
+        document.getElementById('detailBadge').innerText = data.badge;
+        document.getElementById('detailBadge').className = `badge ${data.class}`;
+        
+        document.getElementById('detailMeaning').innerHTML = data.meaning;
+        document.getElementById('detailImpact').innerHTML = data.impact;
+        document.getElementById('detailWorkflow').innerHTML = data.workflow;
+        document.getElementById('detailConversation').innerHTML = data.conversation;
+        document.getElementById('detailPitch').innerHTML = data.pitch;
+    }
+
+    // Search Bar: Filters Button List
+    function filterAbbrevButtons() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let buttons = document.getElementsByClassName('abbrev-btn');
+        
+        Object.keys(termDatabase).forEach((term, index) => {
+            let data = termDatabase[term];
+            let searchHaystack = (term + " " + data.badge + " " + data.meaning).toLowerCase();
+            
+            if (searchHaystack.includes(input)) {
+                buttons[index].style.display = "";
+            } else {
+                buttons[index].style.display = "none";
+            }
+        });
+    }
+
+    // Flashcard Logic
+    let currentCardIndex = 0;
+    const flashcardKeys = Object.keys(termDatabase);
+
+    function setupFlashcards() {
+        let term = flashcardKeys[currentCardIndex];
+        let card = termDatabase[term];
+        
+        document.getElementById('flashcardElement').classList.remove('flipped');
+        document.getElementById('flashcardFront').innerText = term;
+        document.getElementById('flashcardBadge').innerText = card.badge;
+        document.getElementById('flashcardBadge').className = `badge ${card.class}`;
+        
+        document.getElementById('flashcardBackTitle').innerText = `${term}: ${card.badge}`;
+        document.getElementById('flashcardBackDef').innerText = card.meaning;
+        document.getElementById('flashcardBackImpact').innerText = card.impact;
+        document.getElementById('flashcardBackSales').innerText = card.pitch;
+    }
+
+    function flipCard() {
+        document.getElementById('flashcardElement').classList.toggle('flipped');
+    }
+
+    function prevCard() {
+        if (currentCardIndex > 0) {
+            currentCardIndex--;
+            setupFlashcards();
+        }
+    }
+
+    function nextCard() {
+        if (currentCardIndex < flashcardKeys.length - 1) {
+            currentCardIndex++;
+            setupFlashcards();
+        }
+    }
+
+    // Comprehensive 15-Question Quiz Data
+    const quizQuestions = [
+        {
+            q: "1. What is the fundamental difference between PDPM and the previous RUG-IV reimbursement system?",
+            opts: ["RUG-IV was based on resident acuity; PDPM is based on therapy hours.", "PDPM bases reimbursement on clinical acuity and documented needs; RUG-IV was driven by total therapy minutes.", "PDPM pays a flat rate per patient regardless of clinical complexity."],
+            correct: 1,
+            exp: "Correct! PDPM shifted reimbursement from clinical volume (therapy hours) to patient clinical characteristics (value/acuity-based)."
+        },
+        {
+            q: "2. Why is a high-accuracy Case Mix Index (CMI) critical for a SNF Administrator?",
+            opts: ["It proves the clinical staff are completing their MDS on time.", "It directly reflects average resident complexity, determining the facility's reimbursement.", "It automatically increases their Five-Star Quality Score."],
+            correct: 1,
+            exp: "Correct! A higher CMI indicates a more acute patient base requiring more expensive nursing resources, and thus unlocks higher billing rates."
+        },
+        {
+            q: "3. Who primarily records daily point-of-care ADL scores inside the EHR?",
+            opts: ["The MDS Coordinator", "CNAs and Floor Nurses", "The Therapy Director"],
+            correct: 1,
+            exp: "Correct! Certified Nursing Assistants (CNAs) spend the most daily physical time tracking and logging the active baseline of patient dependency."
+        },
+        {
+            q: "4. What happens if a patient gets IV therapy during their stay, but the MDS coordinator sets an ARD lookback window that misses the treatment?",
+            opts: ["The therapy is automatically audited and paid separately under Medicare Part B.", "The clinical documentation can be edited post-billing without penalty.", "The clinical service cannot be legally counted, resulting in a loss of NTA billing points."],
+            correct: 2,
+            exp: "Correct! If a high-acuity indicator falls outside the lookback window of the selected ARD, it cannot be included in the MDS billing assessment."
+        },
+        {
+            q: "5. An Administrator is complaining about skyrocketing nursing labor overhead. What is a strategic sales response?",
+            opts: ["Pitch how your platform helps clinicians code ICD-10 diagnoses faster.", "Show how your scheduling software matches nurse shifts to patient census, reducing expensive agency nursing hours.", "Recommend they schedule fewer therapy hours for Medicare Part A stays."],
+            correct: 1,
+            exp: "Correct! Matching workforce scheduling to live patient counts directly limits the reliance on expensive external nursing agencies."
+        },
+        {
+            q: "6. Why is a low-acuity CMI coupled with high nurse workloads a major financial warning sign?",
+            opts: ["It indicates the facility has high employee turnover.", "It means the facility is taking care of complex, sick patients but failing to document the acuity levels on the MDS.", "It indicates the local hospital has stopped referring Medicare Part A patients."],
+            correct: 1,
+            exp: "Correct! This represents 'documentation leakage'—providing expensive, resource-heavy care without capturing it to justify corresponding reimbursement."
+        },
+        {
+            q: "7. Why is Medicare Part A different from Medicare Part B in skilled nursing settings?",
+            opts: ["Part A is state-funded Medicaid; Part B is federal insurance.", "Part A covers the inpatient daily rate stay; Part B pays for specific outpatient therapies once Part A benefits expire.", "Part A is managed by private health systems; Part B is managed directly by CMS."],
+            correct: 1,
+            exp: "Correct! Medicare Part A is inpatient skilled stay insurance (up to 100 days). Medicare Part B covers medically necessary outpatient-style clinical therapy."
+        },
+        {
+            q: "8. What is the danger of clinical departments working in siloed 'pockets'?",
+            opts: ["It limits therapist scheduling hours.", "It leads to poor IDT communication, resulting in missed clinical metrics and higher preventable hospital readmissions.", "It increases HIPAA compliance risks."],
+            correct: 1,
+            exp: "Correct! Disconnected clinical communications within the Interdisciplinary Team (IDT) yield fragmented care planning and clinical mistakes."
+        },
+        {
+            q: "9. How does an ICD-10 code directly affect PDPM?",
+            opts: ["It defines which physician is assigned to sign off on the clinical chart.", "It categorizes the resident's primary medical condition, placing them into a specific PDPM clinical group that sets base reimbursement.", "It is only used for HIPAA compliance tracking."],
+            correct: 1,
+            exp: "Correct! The primary ICD-10 code placed on the MDS determines the patient's classification within the PDPM reimbursement model."
+        },
+        {
+            q: "10. What category does high-cost medical services like chemotherapy or IV antibiotics fall under in the PDPM system?",
+            opts: ["Physical Therapy (PT)", "Nursing Clinical Components", "Non-Therapy Ancillaries (NTA)"],
+            correct: 2,
+            exp: "Correct! High-acuity medical conditions and high-cost medications are grouped within the Non-Therapy Ancillaries (NTA) category."
+        },
+        {
+            q: "11. Why are hospital readmission rates so vital to a facility's business model?",
+            opts: ["CMS can fine them, and local hospitals will stop referring lucrative Medicare Part A patients to them.", "High readmissions automatically lower their state Medicaid billing rates.", "It requires additional MDS coordinator staff to audit the files."],
+            correct: 0,
+            exp: "Correct! SNFs rely on hospital referrals. If a SNF has high readmission rates, hospitals will avoid sending them patients to shield their own referral metrics."
+        },
+        {
+            q: "12. What does CMS stand for?",
+            opts: ["Clinical Management Systems", "Centers for Medicare & Medicaid Services", "Certified Medical Standards Group"],
+            correct: 1,
+            exp: "Correct! CMS is the federal regulatory body governing nursing homes and reimbursement systems."
+        },
+        {
+            q: "13. What is a major pitfall of pitching a software system to a Director of Nursing (DON)?",
+            opts: ["Suggesting that your system will give their nurses a wider clinical library of articles to read.", "Focusing on how the platform cuts down on administrative tasks, clicks, and charting times.", "Not realizing that LPNs are licensed under different state guidelines than RNs."],
+            correct: 0,
+            exp: "Correct! Busy floor nurses do not have spare time. Pitching things that add digital load, dashboards, or extra reading is a major mistake."
+        },
+        {
+            q: "14. What occurs if a facility experiences HIPAA non-compliance?",
+            opts: ["They are restricted to admitting only Medicaid patients.", "They can face severe civil monetary penalties, reputational damage, and federal regulatory citations.", "The local hospital system must absorb their clinical team's liability."],
+            correct: 1,
+            exp: "Correct! Securing Protected Health Information (PHI) is a major legal requirement. Breaks trigger significant financial fines."
+        },
+        {
+            q: "15. How does a facility's public 'Five-Star Quality Star Rating' directly affect their marketing and sales?",
+            opts: ["It directly sets their Medicaid rates.", "It is the primary score hospitals and families review when choosing where to refer patients.", "It reduces the scheduling workload for their RN clinical team."],
+            correct: 1,
+            exp: "Correct! A facility's Star Rating is a key indicator of clinical quality, and is public facing on CMS Care Compare."
+        }
+    ];
+
+    let currentQ = -1;
+    let quizScore = 0;
+
+    function startQuiz() {
+        currentQ = 0;
+        quizScore = 0;
+        showQuizQuestion();
+    }
+
+    function showQuizQuestion() {
+        document.getElementById('quizExplanation').style.display = 'none';
+        document.getElementById('nextBtn').classList.add('hidden');
+        
+        let qBadge = document.getElementById('quizBadge');
+        qBadge.innerText = `Question ${currentQ + 1}/15`;
+        qBadge.className = "badge badge-clinical";
+
+        let qData = quizQuestions[currentQ];
+        document.getElementById('questionText').innerText = qData.q;
+        
+        let optionsHtml = "";
+        qData.opts.forEach((opt, idx) => {
+            optionsHtml += `<button class="quiz-option" id="qopt-${idx}" onclick="selectQuizAnswer(${idx})">${opt}</button>`;
+        });
+        document.getElementById('quizOptions').innerHTML = optionsHtml;
+    }
+
+    function selectQuizAnswer(idx) {
+        let qData = quizQuestions[currentQ];
+        let options = document.getElementsByClassName('quiz-option');
+        
+        for (let i = 0; i < options.length; i++) {
+            options[i].disabled = true;
+            if (i === qData.correct) {
+                options[i].style.backgroundColor = "#d1fae5";
+                options[i].style.borderColor = "#10b981";
+            } else if (i === idx) {
+                options[i].style.backgroundColor = "#fee2e2";
+                options[i].style.borderColor = "#ef4444";
+            }
+        }
+
+        if (idx === qData.correct) {
+            quizScore++;
+            updateAcademyProgress();
+        }
+
+        let exp = document.getElementById('quizExplanation');
+        exp.innerText = qData.exp;
+        exp.style.display = 'block';
+        
+        document.getElementById('nextBtn').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        if (currentQ < quizQuestions.length) {
+            showQuizQuestion();
+        } else {
+            let badge = document.getElementById('quizBadge');
+            badge.innerText = "Complete";
+            badge.className = "badge badge-reimbursement";
+            
+            let percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            let feedbackMsg = percentage >= 80 ? "🎉 Outstanding! You have mastered Skilled Nursing Facility workflows and operations!" : "📚 Good effort! Review the database and re-run the quiz to improve your sales knowledge.";
+            
+            document.getElementById('questionText').innerText = `Certification Quiz Ended!\nYour Score: ${quizScore}/15 (${percentage}%)`;
+            document.getElementById('quizOptions').innerHTML = `<p style='font-weight: 600;'>${feedbackMsg}</p><button class='btn' style='width:100%;' onclick='startQuiz()'>Re-test Knowledge</button>`;
+            document.getElementById('quizExplanation').style.display = 'none';
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
+    }
+
+    function updateAcademyProgress() {
+        let countLabel = document.getElementById('completionLabel');
+        countLabel.innerText = `${quizScore}/15 Certified`;
+        
+        let progressPercent = Math.round((quizScore / quizQuestions.length) * 100);
+        document.getElementById('academyProgress').style.width = `${progressPercent}%`;
+    }
+
+    // Initialize Page
+    window.onload = function() {
+        renderAbbreviationGrid();
+    }
+</script>
+
+</body>
+</html>
